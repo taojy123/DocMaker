@@ -20,7 +20,7 @@ def repword(w, oldstr, newstr):
 
 
 open("remarks.txt", "a")
-remarks = open("remarks.txt").read()
+remarks = open("remarks.txt").read().strip().replace("\r", " ").replace("\n", " ")
 
 w = win32com.client.DispatchEx('Word.Application')
 w.Visible = 1
@@ -35,12 +35,17 @@ sheets = wb.sheets()
 
 ld_total = 0
 
+count = 1
 for sheet in sheets:
     date = sheet.cell(1,0).value
     date = re.findall(r".*?(\w+).*?(\w+).*?(\w+)", date)[0]
     year, month, day = date
     i = 3
     while sheet.cell(i,6).value:
+        if count > 50:
+            break
+        count += 1
+
         num = int(sheet.cell(i,6).value)
         name = sheet.cell(i,0).value
         quantity = int(sheet.cell(i,1).value)
@@ -104,3 +109,5 @@ w.Selection.InsertBefore(str(ld_total))
 print ld_total
 
 print "ok"
+
+raw_input()
