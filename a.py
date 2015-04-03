@@ -53,13 +53,16 @@ try:
         sheet = sheets[h]
         sheet_w = wb_w.get_sheet(h)
 
-        date = sheet.cell(1,0).value
-        date = re.findall(r".*?(\w+).*?(\w+).*?(\w+)", date)[0]
-        year, month, day = date
+        try:
+            date = sheet.cell(1,0).value
+            date = re.findall(r".*?(\w+).*?(\w+).*?(\w+)", date)[0]
+            year, month, day = date
+        except:
+            break
+
         i = 3
         while sheet.cell(i,6).value:
-            if count > 50:
-                break
+
             count += 1
 
             num = int(sheet.cell(i, 6).value)
@@ -111,10 +114,11 @@ try:
             w.Selection.MoveDown(Unit=7, Count=3)
             i += 1
             print i
-            
 
+    sheet_w = wb_w.get_sheet(0)  
+    sheet_w.write(3, 8, ld_total)
 
-    w.Selection.InsertBefore(str(ld_total))
+    # w.Selection.InsertBefore(str(ld_total))
 
     # w.Visible = 1
 
